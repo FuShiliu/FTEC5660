@@ -1,0 +1,121 @@
+# MoralAgents Reproducibility Assignment (FTEC5660)
+
+This repository contains my reproducibility work for the MoralAgents multi-agent discussion project (LangGraph-based), including code modifications, run instructions, and report files.
+
+## What I reproduced
+
+* Verified the multi-phase agentic workflow (`onboarding -> discussion -> reflection -> superviser`)
+* Verified JSONL output structure consistency (message-opinion pairing)
+* Measured runtime behavior under different agent settings (based on available runs)
+
+## My modifications
+
+I made several engineering-focused changes to improve reproducibility and analysis usability:
+
+1. **Auto-create output directory**
+
+   * Prevents file write errors when output folders do not exist.
+
+2. **Normalize opinion into numeric score (`opinion_num`)**
+
+   * Extracts a score in `[1..7]` from textual opinion output.
+
+3. **Record per-sample runtime (`elapsed_seconds`)**
+
+   * Saves runtime into JSONL for later analysis.
+
+4. **Run only first N samples**
+
+   * Useful for smoke tests and fast debugging.
+
+## Environment Setup
+
+### Option A: venv
+
+```bash
+python -m venv .venv
+# Windows
+.venv\Scripts\activate
+# macOS/Linux
+source .venv/bin/activate
+
+pip install -r requirements.txt
+```
+
+### Option B: conda (if used)
+
+```bash
+conda create -n moralagents python=3.10 -y
+conda activate moralagents
+pip install -r requirements.txt
+```
+
+## Model Backend
+
+This repo supports:
+
+* **Ollama** local models (e.g., `qwen3:8b`)
+* **OpenAI-compatible** models (if `OPENAI_API_KEY` is set)
+
+> Do **NOT** commit API keys. Use environment variables only.
+
+## Data
+
+Place dataset files under:
+
+```bash
+data/<dataset>/data.json
+```
+
+Example:
+
+```bash
+data/greene/data.json
+```
+
+## Quick Smoke Test (fastest)
+
+Single-agent, shortest-time run:
+
+```bash
+python src/main.py greene qwen3:8b 1 0.6 runs/quick_test 1 "" 8192
+```
+
+If your modified version supports `max_examples` as an extra argument:
+
+```bash
+python src/main.py greene qwen3:8b 1 0.6 runs/quick_test 1 "" 8192 1
+```
+
+## Output Format (JSONL)
+
+Each line is a JSON record. Example fields:
+
+* `name`
+* `phase`
+* `onboarding`
+* `opinion`
+* `opinion_num` (added)
+* `message`
+* `reasoning`
+* `elapsed_seconds` (added)
+
+## Reports
+
+* English report: `reports/Reproducibility_Report_English_Final.docx`
+
+## Commit History (for review)
+
+Changes are split into small, reviewable commits (not one giant dump), including:
+
+* output directory creation
+* opinion numeric parsing
+* runtime logging
+* first-N-samples control
+* README and documentation
+
+## Security / Secrets
+
+* No API keys or secrets are committed.
+* `.env` is ignored via `.gitignore`.
+* Credentials are loaded through environment variables only.
