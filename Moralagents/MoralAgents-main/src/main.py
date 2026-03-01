@@ -237,6 +237,9 @@ if __name__ == '__main__':
     num_attempts = int(sys.argv[3])
     temperature = float(sys.argv[4])
     save_dir = sys.argv[5]
+    os.makedirs(save_dir, exist_ok=True)
+    num_rounds = int(sys.argv[6])
+    save_dir = sys.argv[5]
     num_rounds = int(sys.argv[6])
     onboardings = sys.argv[7]
     num_ctx = int(sys.argv[8])
