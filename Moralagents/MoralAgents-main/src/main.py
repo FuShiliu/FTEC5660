@@ -252,9 +252,12 @@ if __name__ == '__main__':
         assert num_rounds == 1
 
     assert dataset in ['keshmirian', 'greene', 'korner', 'oxford_utilitarianism_scale', 'cni']
-    with open(f'data/{dataset}/data.json', 'r') as f: 
+       with open(f'data/{dataset}/data.json', 'r') as f:
         data = json.load(f)
-
+    max_examples = int(os.environ.get("MAX_EXAMPLES", "0"))  # 0 = no limit
+    if max_examples > 0:
+        data = data[:max_examples]
+        print(f"[INFO] MAX_EXAMPLES={max_examples}, running subset only.", flush=True)
     if model_name.startswith('gpt'):
         llm = ChatOpenAI(model=model_name, temperature=temperature, api_key=os.environ['OPENAI_API_KEY'])
     elif model_name.startswith('o'):
