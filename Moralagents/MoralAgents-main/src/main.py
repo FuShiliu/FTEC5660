@@ -10,7 +10,11 @@ from langchain_ollama.chat_models import ChatOllama
 from langchain_openai import ChatOpenAI
 
 from prompts import get_prompts
-
+import re
+def parse_opinion_to_int(op):
+    """Extract a 1-7 integer from opinion text. Returns None if not found."""
+    m = re.search(r"\b([1-7])\b", str(op))
+    return int(m.group(1)) if m else None
 
 def extract_think_tags(response):
     
