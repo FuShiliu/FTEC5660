@@ -277,9 +277,11 @@ if __name__ == '__main__':
             
             print(f"Processing: {save_path}")
             print('='*40, f"dataset: {dataset} | example: {example['index']} | attempt: {attempt+1}", '='*40,  flush=True)
-            start_time = time.time()
+           start_time = time.time()
             responses = run_example(example['scenario'], example['subject'], onboardings)
-            print("Saving to", save_path,  flush=True)
+            end_time = time.time()
+            elapsed_seconds = end_time - start_time
+            print("Saving to", save_path, flush=True)
             with open(save_path, 'w') as f:
                 assert len(responses['messages']) == len(responses['opinions'])
                 for message, opinion in zip(responses['messages'], responses['opinions']):
